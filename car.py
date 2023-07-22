@@ -1,19 +1,10 @@
-from abc import ABC, abstractmethod
-from datetime import datetime, timedelta
+from serviceable import Serviceable
 
-class Car(ABC):
-    def __init__(self, last_service_date):
-        self.last_service_date = last_service_date
 
-    @abstractmethod
-    def needs_service(self):
-        pass
-
-class Battery:
-    def __init__(self, last_service_date):
-        self.last_service_date = last_service_date
+class Car(Serviceable):
+    def __init__(self, engine, battery):
+        self.engine = engine
+        self.battery = battery
 
     def needs_service(self):
-        today = datetime.today().date()
-        service_threshold = self.last_service_date + timedelta(days=2*365)
-        return service_threshold <= today
+        return self.engine.needs_service() or self.battery.needs_service()
