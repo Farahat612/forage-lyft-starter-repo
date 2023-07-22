@@ -1,12 +1,11 @@
 from datetime import datetime
+from engine_factory import EngineFactory
+from car import Battery
 
-from engine.sternman_engine import SternmanEngine
+class Palindrome:
+    def __init__(self, last_service_date, engine_type, battery_type, **kwargs):
+        self.engine = EngineFactory.create_engine(engine_type, last_service_date, **kwargs)
+        self.battery = Battery(last_service_date)
 
-
-class Palindrome(SternmanEngine):
     def needs_service(self):
-        service_threshold_date = self.last_service_date.replace(year=self.last_service_date.year + 4)
-        if service_threshold_date < datetime.today().date() or self.engine_should_be_serviced():
-            return True
-        else:
-            return False
+        return self.engine.needs_service() or self.battery.needs_service()
